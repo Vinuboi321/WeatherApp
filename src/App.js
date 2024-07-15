@@ -47,15 +47,17 @@ function App() {
   const [dates, setDates] = useState([]); // State to store the forecast dates
   const [maxTemps, setMaxTemps] = useState([]); // State to store the max temperatures of the forecast
   const [weatherCodes, setWeatherCodes] = useState([]); // State to store the weather codes of the forecast
+  const [activeIndex, setActiveIndex] = useState(null); // State to manage active accordion item
 
   const searchPressed = async () => {
     // Fetch current weather data based on the search input
     const weatherResponse = await fetch(`${OpenWeatherAPI.base}weather?q=${search}&units=imperial&APPID=${OpenWeatherAPI.key}`);
     const result = await weatherResponse.json();
-    //Current weather set
     setWeather(result);
     fetchForecast(result.coord.lat, result.coord.lon);
+    console.log(result);
   };
+  
   const handleGetLocation = () => {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const lat = position.coords.latitude;
@@ -65,21 +67,25 @@ function App() {
       const result = await weatherResponse.json();
       setWeather(result);
       fetchForecast(lat, lon);
+      console.log(result);
     });
   };
+
   const fetchForecast = async (latitude, longitude) => {
     // Construct API URL using given latitude and longitude coords
     const apiurl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max&temperature_unit=fahrenheit&wind_speed_unit=mph`;
     
     const forecastResponse = await fetch(apiurl);
-    if (!forecastResponse.ok) {
-      throw new Error("Network response was not ok");
-    }
 
     const forecastData = await forecastResponse.json();
     setDates(forecastData.daily.time); // Set the dates from the forecast data
     setMaxTemps(forecastData.daily.temperature_2m_max); // Set the max temperatures from the forecast data
     setWeatherCodes(forecastData.daily.weather_code); // Set the weather codes from the forecast data
+    console.log(forecastData);
+  };
+
+  const toggleAccordion = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
   };
 
   return (
@@ -90,6 +96,7 @@ function App() {
           <input
             type="text"
             placeholder="Enter postal code"
+            value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           <button onClick={searchPressed}>Search</button>
@@ -114,16 +121,21 @@ function App() {
         {/* Display forecast for next seven days 
         - Postal code specific(per country, could use user's country)
         - Capture user location using browser loc(client loc data)
-        - Accomadte week's weather return into react accordian component
+        - Accomodate week's weather return into react accordian component
         - Add weather icon for each weather description
          - */}
         <div>
           <h2>Next 7 Days Forecast:</h2>
           {dates.map((date, index) => (
-            <div key={index}>
-              <p>Date: {new Date(date).toLocaleDateString()}</p>
-              <p>Max Temperature: {maxTemps[index]}°F</p>
-              <p>Weather: {getWeatherDescription(weatherCodes[index])}</p>
+            <div key={index} className="accordion-item">
+              <div className="accordion-header" onClick={() => toggleAccordion(index)}>
+                <p>Date: {new Date(date).toLocaleDateString()}</p>
+                <div className={`arrow ${activeIndex === index ? 'arrow-up' : 'arrow-down'}`}></div>
+              </div>
+              <div className={`accordion-content ${activeIndex === index ? 'active' : ''}`}>
+                <p>Max Temperature: {maxTemps[index]}°F</p>
+                <p>Weather: {getWeatherDescription(weatherCodes[index])}</p>
+              </div>
             </div>
           ))}
         </div>

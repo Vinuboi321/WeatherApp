@@ -36,3 +36,46 @@
     transform: rotate(360deg);
   }
 }
+
+.accordion-item {
+  width: 100%;
+  border: 1px solid #ffffff;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.accordion-header {
+  background-color: #4d4f4f;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordion-content {
+  padding: 10px;
+  display: none;
+  background-color: #00eeff;
+}
+
+.accordion-content.active {
+  display: block;
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #000;
+  margin-left: 10px;
+}
+
+.arrow-up {
+  transform: rotate(-180deg);
+}
+
+.arrow-down {
+  transform: rotate(0deg);
+}
