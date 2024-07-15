@@ -1,5 +1,16 @@
 import "./App.css";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSun,
+  faCloudSun,
+  faCloud,
+  faSmog,
+  faCloudShowersHeavy,
+  faCloudSunRain,
+  faSnowflake,
+  faBolt,
+} from "@fortawesome/free-solid-svg-icons";
 
 const OpenWeatherAPI = {
   key: "7b7d8060cba578a94a4bd7baa36202c7",
@@ -38,8 +49,40 @@ const weatherDescriptions = {
   99: "Thunderstorm with heavy hail",
 };
 
-// Function to get weather description based on the weather code
+const weatherIcons = {
+  0: faSun, // Clear sky
+  1: faSun, // Mainly clear
+  2: faCloudSun, // Partly cloudy
+  3: faCloud, // Overcast
+  45: faSmog, // Fog
+  48: faSmog, // Depositing rime fog
+  51: faCloudShowersHeavy, // Light drizzle
+  53: faCloudShowersHeavy, // Moderate drizzle
+  55: faCloudShowersHeavy, // Dense drizzle
+  56: faCloudShowersHeavy, // Light freezing drizzle
+  57: faCloudShowersHeavy, // Dense freezing drizzle
+  61: faCloudShowersHeavy, // Slight rain
+  63: faCloudShowersHeavy, // Moderate rain
+  65: faCloudShowersHeavy, // Heavy rain
+  66: faCloudShowersHeavy, // Light freezing rain
+  67: faCloudShowersHeavy, // Heavy freezing rain
+  71: faSnowflake, // Slight snow fall
+  73: faSnowflake, // Moderate snow fall
+  75: faSnowflake, // Heavy snow fall
+  77: faSnowflake, // Snow grains
+  80: faCloudSunRain, // Slight rain showers
+  81: faCloudSunRain, // Moderate rain showers
+  82: faCloudSunRain, // Violent rain showers
+  85: faSnowflake, // Slight snow showers
+  86: faSnowflake, // Heavy snow showers
+  95: faBolt, // Thunderstorm
+  96: faBolt, // Thunderstorm with slight hail
+  99: faBolt, // Thunderstorm with heavy hail
+};
+
+// Function to get weather description and weather icon based on the weather code 
 const getWeatherDescription = (code) => weatherDescriptions[code] || "Unknown weather code";
+const getWeatherIcon = (code) => weatherIcons[code];
 
 function App() {
   const [search, setSearch] = useState(""); // State to store the search input
@@ -68,7 +111,7 @@ function App() {
       setWeather(result);
       fetchForecast(lat, lon);
       console.log(result);
-    });
+\    });
   };
 
   const fetchForecast = async (latitude, longitude) => {
@@ -112,7 +155,11 @@ function App() {
             <p>{weather.name}</p>
             <p>{weather.main.temp}°F</p>
             <p>{weather.weather[0].main}</p>
-            <p>({weather.weather[0].description})</p>
+            <p>
+              ({weather.weather[0].description})
+              <img className="weather-icon" src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} alt={weather.weather[0].description} />
+            </p>
+            
           </div>
         ) : (
           ""
