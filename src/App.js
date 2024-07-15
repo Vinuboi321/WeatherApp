@@ -181,7 +181,10 @@ function App() {
               </div>
               <div className={`accordion-content ${activeIndex === index ? 'active' : ''}`}>
                 <p>Max Temperature: {maxTemps[index]}°F</p>
-                <p>Weather: {getWeatherDescription(weatherCodes[index])}</p>
+                <p>
+                Weather: {getWeatherDescription(weatherCodes[index])}{" "}
+                <FontAwesomeIcon icon={getWeatherIcon(weatherCodes[index])} />
+              </p>
               </div>
             </div>
           ))}
