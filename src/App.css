@@ -28,6 +28,12 @@
   color: #61dafb;
 }
 
+.weather-icon {
+  vertical-align: middle;
+  width: 50px; /* Adjust the width as needed */
+  height: 50px; /* Adjust the height as needed */
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -36,3 +42,4 @@
     transform: rotate(360deg);
   }
 }
+
