@@ -111,7 +111,7 @@ function App() {
       setWeather(result);
       fetchForecast(lat, lon);
       console.log(result);
-\    });
+    });
   };
 
   const fetchForecast = async (latitude, longitude) => {
